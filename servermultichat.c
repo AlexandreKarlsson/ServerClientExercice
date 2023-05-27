@@ -10,6 +10,7 @@
 
 pthread_mutex_t clients_mutex;
 int num_clients = 0;
+char name_tab[MAX_CLIENTS][MAX_NAME_SIZE];
 
 void checkValidity(int validity, char sentence[]) {
     if (validity < 0) {
@@ -38,22 +39,55 @@ void bubbleSort(int numbers[], int length) {
     printNumbers(numbers, length);
 }
 
+void addName(char name[]) {
+    pthread_mutex_lock(&clients_mutex);
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (name_tab[i][0] == '\0') {
+            strcpy(name_tab[i], name);
+            break;
+        }
+    }
+    printf("Add Name : %s \n", name);
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        printf("Name : %s \n", name_tab[i]);
+    }
+    pthread_mutex_unlock(&clients_mutex);
+}
+
+void deleteName(char name[]) {
+    pthread_mutex_lock(&clients_mutex);
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        if (strcmp(name_tab[i], name) == 0) {
+            name_tab[i][0] = '\0';
+            break;
+        }
+    }
+    num_clients--;
+    printf("Close client, number of client : %i \n", num_clients);
+    for (int i = 0; i < MAX_CLIENTS; i++) {
+        printf("Name : %s \n", name_tab[i]);
+    }
+    pthread_mutex_unlock(&clients_mutex);
+}
+
 void* threadClient(void* socket) {
     SOCKET client_socket = *(SOCKET*)socket;
     boolean ack_bool = TRUE;
     boolean connection = TRUE;
     struct message msg;
-    while(connection){
+    // REGISTER THE CLIENT
+    char req[] = "Enter your name :";
+    char name[MAX_NAME_SIZE];
+    send(client_socket, req, sizeof(req), 0);
+    recv(client_socket, name, MAX_NAME_SIZE, 0);
+    addName(name);
+    while (connection) {
         int validity = 404;
         validity = recv(client_socket, (char*)&msg, sizeof(struct message), 0);
         checkValidity(validity, "Receive");
-        if(validity<0){
-            printf("Client deconnection \n");
-            pthread_mutex_lock(&clients_mutex);
-            num_clients--;
-            printf("Close client, number of client : %i \n",num_clients);
-            pthread_mutex_unlock(&clients_mutex);
-            break;}
+        if (validity < 0) {
+            break;
+        }
         if (strcmp(msg.command, COMMAND_PRINT) == 0) {
             printf("Command: %s \n", msg.command);
             struct print_command_payload* msg_payload = (struct print_command_payload*)msg.buf;
@@ -66,7 +100,7 @@ void* threadClient(void* socket) {
             bubbleSort(msg_payload->numbers, msg_payload->len);
         }
         else if (strcmp(msg.command, COMMAND_CLOSE) == 0) {
-            connection=FALSE;
+            connection = FALSE;
             break;
         }
         else {
@@ -80,17 +114,13 @@ void* threadClient(void* socket) {
         else {
             ack_payload.return_code = RET_ERROR;
         }
-        
+
         struct message ack;
         strcpy(ack.command, COMMAND_RETURN);
         memcpy(ack.buf, &ack_payload, sizeof(struct return_command_payload));
         send(client_socket, (char*)&ack, sizeof(struct message), 0);
     }
-   
-    pthread_mutex_lock(&clients_mutex);
-    num_clients--;
-    printf("Close client, number of client : %i \n",num_clients);
-    pthread_mutex_unlock(&clients_mutex);
+    deleteName(name);
     closesocket(client_socket);
     return NULL;
 }
@@ -120,7 +150,7 @@ int main() {
     validity = listen(socket_Server, 3);
     printf("Server Listening\n");
     checkValidity(validity, "Listening");
-    
+
     SOCKET socket_Client;
     struct sockaddr_in addr_Client;
     int clientAddrLen = sizeof(addr_Client);
@@ -131,7 +161,7 @@ int main() {
         pthread_mutex_lock(&clients_mutex);
         if (num_clients < MAX_CLIENTS) {
             num_clients++;
-            printf("New client, number of client : %i \n",num_clients);
+            printf("New client, number of client : %i \n", num_clients);
             pthread_mutex_unlock(&clients_mutex);
             pthread_create(&threads[num_clients - 1], NULL, threadClient, &socket_Client);
         }

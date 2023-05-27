@@ -7,6 +7,7 @@
 #define COMMAND_CLOSE "close"
 
 #define PORT 9999
+#define MAX_NAME_SIZE 20
 
 struct message {
     char command[COMMAND_STR_LENGTH];
