@@ -2,7 +2,9 @@ gcc server.c -o server.exe -lws2_32
 gcc client.c -o client.exe -lws2_32
 gcc clientv1.c -o clientv1.exe -lws2_32
 gcc clientv2.c -o clientv2.exe -lws2_32
+gcc clientv3.c -o clientv3.exe -lws2_32
 gcc servermulti.c -o servermulti.exe -lws2_32 -lpthread
+gcc servermultichat.c -o servermultichat.exe -lws2_32 -lpthread
 
 
 
