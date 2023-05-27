@@ -4,6 +4,7 @@
 #define COMMAND_PRINT "print"
 #define COMMAND_SORT "sort"
 #define COMMAND_RETURN "return"
+#define COMMAND_CLOSE "close"
 
 #define PORT 9999
 

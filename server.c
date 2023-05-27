@@ -78,7 +78,7 @@ int main() {
         else if (strcmp(msg.command, COMMAND_SORT)==0){
             printf("Command: %s \n", msg.command);
             struct sort_command_payload* msg_payload = (struct sort_command_payload*)msg.buf;
-            printNumbers(msg_payload->numbers,msg_payload->len);
+            //printNumbers(msg_payload->numbers,msg_payload->len);
             bubbleSort(msg_payload->numbers,msg_payload->len);
         }
         else{
@@ -99,10 +99,10 @@ int main() {
 
     
 
-    // Fermer socket serveur
+    // Close Client and server
     closesocket(socket_Server);
 
-    // Terminer l'utilisation de Winsock
+    // // Close Winsock
     WSACleanup();
     return 0;
 }
