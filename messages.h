@@ -7,7 +7,6 @@
 
 #define PORT 9999
 
-
 struct message {
     char command[COMMAND_STR_LENGTH];
     char buf[BUF_SIZE];

@@ -18,6 +18,7 @@ int main() {
     struct sockaddr_in addr_Client;
     int clientAddrLen = sizeof(addr_Client);
     char buffer[BUF_SIZE];
+     struct message msg;
 
 
     printf("Start server \n");
@@ -41,8 +42,21 @@ int main() {
     while (TRUE)
     {
         socket_Client = accept(socket_Server, (struct sockaddr*)&addr_Client, &clientAddrLen);
-        validity = recv(socket_Client, buffer, sizeof(buffer), 0);
-        printf("Commande : %s \n", buffer);
+        validity = recv(socket_Client, (char*)&msg, sizeof(struct message), 0);
+        checkValidity(validity, "Receive");
+        printf("msg.command : %s \n", msg.command);
+        if (strcmp(msg.command, COMMAND_PRINT) == 0) {
+            printf("Print command!\n");
+            struct print_command_payload* msg_payload = (struct print_command_payload*)msg.buf;
+            printf("msg_payload.string_to_print : %s \n", msg_payload->string_to_print);
+            printf("msg_payload.len : %i \n", msg_payload->len);
+        }
+        else if (strcmp(msg.command, COMMAND_SORT)==0){
+            printf("Sort command!\n");
+        }
+        else{
+            printf("Unknown command!\n");
+        }
     }
     
     printf("Commande : %s \n", buffer);
