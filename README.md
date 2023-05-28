@@ -1,5 +1,5 @@
 # Server-Client Communication in C
-*Italic text* This is a README file for a C code that demonstrates server-client communication. The code consists of different pairs of servers and clients, each with unique functionality. The clients (clientv1, clientv2, clientv3) are designed to interact with their respective servers (server, servermulti, servermutlichat).
+*This is a README file for a C code that demonstrates server-client communication. The code consists of different pairs of servers and clients, each with unique functionality. The clients (clientv1, clientv2, clientv3) are designed to interact with their respective servers (server, servermulti, servermutlichat).* 
 
 # Code Structure
 The code is organized as follows:
