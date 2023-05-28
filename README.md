@@ -41,10 +41,10 @@ Ensure that you have the necessary libraries and dependencies installed for succ
 
 # Usage
 To run the compiled executables, you can use the following commands:
+*Please note that the usage and functionality of each client and server are specific to their respective pairings. Follow the prompts and instructions provided by each program to interact with them effectively.*
 
 ## For Windows:
-
-- clientv1.exe
+- clientv1.exe [COMMAND] [ORDER]
 - clientv2.exe
 - clientv3.exe
 - server.exe
@@ -53,14 +53,59 @@ To run the compiled executables, you can use the following commands:
 
 ## For Linux or macOS:
 
-- ./clientv1
+- ./clientv1 [COMMAND] [ORDER]
 - ./clientv2
 - ./clientv3
 - ./server
 - ./servermulti
 - ./servermutlichat
 
-Please note that the usage and functionality of each client and server are specific to their respective pairings. Follow the prompts and instructions provided by each program to interact with them effectively.
+This project consists of different pairs of clients and servers and each pair has specific instructions.
+
+## Pair: clientv1-server
+The clientv1-server pair allows communication with a single server.
+
+### Instructions
+
+- Use the following command format to interact with the server: `clientv1 [COMMAND] [ORDER]`
+- Replace `[COMMAND]` with the desired command and `[ORDER]` with the corresponding order for that command.
+- Available commands:
+  - `print`: Print a message on the server terminal. Enclose the message in double quotation marks.
+  - `sort`: Sort a series of numbers (positive or negative integers). Separate the numbers with spaces.
+- Examples:
+  - `clientv1 print "Hello World"`
+  - `clientv1 sort 5 4 3 2 1`
+
+## Pair: clientv2-servermulti
+
+The clientv2-servermulti pair supports multiple clients connecting to a server simultaneously.
+
+### Instructions
+
+1. Launch the client using the command: `clientv2`
+2. In the terminal, enter a command:
+   - Use `print` to print a message on the server terminal.
+   - Use `sort` to sort a series of numbers.
+   - Use `close` to close the client.
+3. For the `print` command, enter the message you want to print (without `" "`).
+4. For the `sort` command, enter a series of numbers to be sorted (positive or negative integers), separated by spaces.
+
+## Pair: clientv3-servermultichat
+
+The clientv3-servermultichat pair enables chat-like communication with the server.
+
+### Instructions
+
+1. Launch the client using the command: `clientv3`
+2. Enter your name and press ENTER.
+3. In the terminal, enter a command:
+   - Use `print` to print a message on the server terminal.
+   - Use `sort` to sort a series of numbers.
+   - Use `close` to close the client. Press ENTER when you have finished entering the command.
+4. For the `print` command, enter the message you want to print (without enclosing it in double quotation marks).
+5. For the `sort` command, enter a series of numbers to be sorted (positive or negative integers), separated by spaces.
+
+Note: Ensure that you follow the specified command formats and provide the required arguments as mentioned above.
 
 # Sources
 - Windows lib for socket:
