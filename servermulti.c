@@ -10,6 +10,8 @@
 
 pthread_mutex_t clients_mutex;
 int num_clients = 0;
+boolean queueIsFull = FALSE;
+SOCKET socket_Client_Q;
 
 void checkValidity(int validity, char sentence[]) {
     if (validity < 0) {
@@ -49,10 +51,23 @@ void* threadClient(void* socket) {
         checkValidity(validity, "Receive");
         if(validity<0){
             printf("Client deconnection \n");
+             /*
             pthread_mutex_lock(&clients_mutex);
+           
             num_clients--;
             printf("Close client, number of client : %i \n",num_clients);
+            
+            //////////////////////////////////////////////////////////////////////////
+            struct message connection_msg;
+            strcpy(connection_msg.command, COMMAND_CONNECTION);
+            struct connection_command_payload connection_payload;
+            connection_payload.connection_code = SERV_FULL_RETRY;
+            memcpy(connection_msg.buf, &connection_payload, sizeof(struct connection_command_payload));
+            send(socket_Client_Q, (char*)&connection_msg, sizeof(struct message), 0);
+            //////////////////////////////////////////////////////////////////////////
+            
             pthread_mutex_unlock(&clients_mutex);
+            */
             break;}
         if (strcmp(msg.command, COMMAND_PRINT) == 0) {
             printf("Command: %s \n", msg.command);
@@ -90,6 +105,15 @@ void* threadClient(void* socket) {
     pthread_mutex_lock(&clients_mutex);
     num_clients--;
     printf("Close client, number of client : %i \n",num_clients);
+    //////////////////////////////////////////////////////////////////////////
+    struct message connection_msg;
+    strcpy(connection_msg.command, COMMAND_CONNECTION);
+    struct connection_command_payload connection_payload;
+    connection_payload.connection_code = SERV_FULL_RETRY;
+    memcpy(connection_msg.buf, &connection_payload, sizeof(struct connection_command_payload));
+    send(socket_Client_Q, (char*)&connection_msg, sizeof(struct message), 0);
+    queueIsFull=FALSE;
+    //////////////////////////////////////////////////////////////////////////
     pthread_mutex_unlock(&clients_mutex);
     closesocket(client_socket);
     return NULL;
@@ -125,20 +149,43 @@ int main() {
     struct sockaddr_in addr_Client;
     int clientAddrLen = sizeof(addr_Client);
 
+    struct message connection_msg;
+    strcpy(connection_msg.command, COMMAND_CONNECTION);
+    struct connection_command_payload connection_payload;
+
     while (TRUE) {
         socket_Client = accept(socket_Server, (struct sockaddr*)&addr_Client, &clientAddrLen);
-
         pthread_mutex_lock(&clients_mutex);
-        if (num_clients < MAX_CLIENTS) {
+        if (num_clients < MAX_CLIENTS) 
+        {
             num_clients++;
             printf("New client, number of client : %i \n",num_clients);
             pthread_mutex_unlock(&clients_mutex);
+            connection_payload.connection_code = SERV_FREE;
+            memcpy(connection_msg.buf, &connection_payload, sizeof(struct connection_command_payload));
+            send(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
             pthread_create(&threads[num_clients - 1], NULL, threadClient, &socket_Client);
         }
-        else {
+        else if (queueIsFull)
+        {
             pthread_mutex_unlock(&clients_mutex);
+
             printf("Connection rejected.\n");
+            connection_payload.connection_code = SERV_FULL_EXIT;
+            memcpy(connection_msg.buf, &connection_payload, sizeof(struct connection_command_payload));
+            send(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
             closesocket(socket_Client);
+        }
+        else
+        {
+            queueIsFull=TRUE;
+            printf("Client in queue.\n");
+            socket_Client_Q=socket_Client;
+            pthread_mutex_unlock(&clients_mutex);
+
+            connection_payload.connection_code = SERV_FULL_Q;
+            memcpy(connection_msg.buf, &connection_payload, sizeof(struct connection_command_payload));
+            send(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
         }
     }
 
