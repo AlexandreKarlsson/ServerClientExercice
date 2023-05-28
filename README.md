@@ -4,6 +4,7 @@
 # Code Structure
 The code is organized as follows:
 
+- client.c: Client test.
 - clientv1.c: Client implementation for server.
 - clientv2.c: Client implementation for servermulti.
 - clientv3.c: Client implementation for servermutlichat.
