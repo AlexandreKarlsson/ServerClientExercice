@@ -5,6 +5,7 @@
 #define COMMAND_SORT "sort"
 #define COMMAND_RETURN "return"
 #define COMMAND_CLOSE "close"
+#define COMMAND_CONNECTION "connection"
 
 #define PORT 9999
 #define MAX_NAME_SIZE 20
@@ -33,4 +34,15 @@ enum return_codes {
 
 struct return_command_payload {
     int return_code;
+};
+
+enum connection_codes{
+    SERV_FREE = 0,
+    SERV_FULL_Q = 1,
+    SERV_FULL_EXIT = 2,
+    SERV_FULL_RETRY = 3
+};
+
+struct connection_command_payload {
+    int connection_code;
 };

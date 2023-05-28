@@ -72,6 +72,7 @@ int main() {
     int validity=404;
     char buffer[BUF_SIZE];
     boolean known_cmd=TRUE;
+    boolean server_full=TRUE;
     struct message msg;
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -84,8 +85,43 @@ int main() {
     addr_Server.sin_port = htons(PORT);
 
     validity=connect(socket_Client, (struct sockaddr*)&addr_Server, sizeof(addr_Server));
+    //printf("Validity connection: %i \n",validity);
     checkValidity(validity, "Connecting");
-
+    struct message connection_msg;
+    printf("Server TEST \n");
+    while (server_full)
+    {
+        printf("Inside \n");
+        recv(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
+        if(strcmp(connection_msg.command, COMMAND_CONNECTION)==0)
+            {
+                struct connection_command_payload connection_payload;
+                memcpy(&connection_payload, connection_msg.buf, sizeof(struct connection_command_payload));
+                if(connection_payload.connection_code==SERV_FREE)
+                {
+                    printf("Server FREE \n");
+                    server_full=FALSE;
+                }
+                else if(connection_payload.connection_code==SERV_FULL_Q)
+                {
+                    printf("In Queue \n");
+                }
+                else if(connection_payload.connection_code==SERV_FULL_EXIT)
+                {
+                    printf("Try later \n");
+                    closesocket(socket_Client);
+                    WSACleanup();
+                    exit(1);
+                }
+                else if(connection_payload.connection_code==SERV_FULL_RETRY)
+                {
+                    printf("Try connection \n");
+                    closesocket(socket_Client);
+                    socket_Client = socket(AF_INET, SOCK_STREAM, 0);
+                    validity=connect(socket_Client, (struct sockaddr*)&addr_Server, sizeof(addr_Server));
+                }
+            }
+    }
     while (1) {
         // Lecture de la commande depuis l'entrée utilisateur
         printf("Enter a command (or 'close' to exit): ");
@@ -114,7 +150,7 @@ int main() {
             printf("Enter the numbers (example: 3 1 2): ");
             char input[BUF_SIZE];
             scanf(" %[^\n]", input);
-            printf("number received: %s\n", input);
+            //printf("number received: %s\n", input);
 
             // split the input into tokens
             char* token = strtok(input, " ");
@@ -150,8 +186,6 @@ int main() {
         if(known_cmd)
         {
             send(socket_Client, (char*) &msg, sizeof(struct message), 0);
-            
-            
             // ACK ///////////////////////////////////////////////
             struct message return_msg;
             recv(socket_Client, (char*)&return_msg, sizeof(struct message), 0);
