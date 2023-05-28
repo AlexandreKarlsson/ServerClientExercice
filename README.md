@@ -4,15 +4,15 @@
 # Code Structure
 The code is organized as follows:
 
-clientv1.c: Client implementation for server.
-clientv2.c: Client implementation for servermulti.
-clientv3.c: Client implementation for servermutlichat.
-server.c: Server implementation for clientv1.
-servermulti.c: Server implementation for clientv2.
-servermutlichat.c: Server implementation for clientv3.
-message.h: Header file for the message implementation and information.
-client.h: Header file for the clients.
-message.h: Header file for the servers.
+- clientv1.c: Client implementation for server.
+- clientv2.c: Client implementation for servermulti.
+- clientv3.c: Client implementation for servermutlichat.
+- server.c: Server implementation for clientv1.
+- servermulti.c: Server implementation for clientv2.
+- servermutlichat.c: Server implementation for clientv3.
+- message.h: Header file for the message implementation and information.
+- client.h: Header file for the clients.
+- message.h: Header file for the servers.
 
 # Server-Client Pairings
 - clientv1 - server: This pairing allows the client (clientv1) to send a single command to the server (server). The server will process the command and provide a response.
@@ -26,13 +26,13 @@ The code is currently designed to run on Windows. However, you can adapt the cod
 To compile the code and generate the executable files, you can use the following commands:
 
 ## For Windows:
-gcc server.c -o server.exe -lws2_32
-gcc client.c -o client.exe -lws2_32
-gcc clientv1.c -o clientv1.exe -lws2_32
-gcc clientv2.c -o clientv2.exe -lws2_32
-gcc clientv3.c -o clientv3.exe -lws2_32
-gcc servermulti.c -o servermulti.exe -lws2_32 -lpthread
-gcc servermultichat.c -o servermultichat.exe -lws2_32 -lpthread
+- gcc server.c -o server.exe -lws2_32
+- gcc client.c -o client.exe -lws2_32
+- gcc clientv1.c -o clientv1.exe -lws2_32
+- gcc clientv2.c -o clientv2.exe -lws2_32
+- gcc clientv3.c -o clientv3.exe -lws2_32
+- gcc servermulti.c -o servermulti.exe -lws2_32 -lpthread
+- gcc servermultichat.c -o servermultichat.exe -lws2_32 -lpthread
 
 
 ## For Linux or macOS:
@@ -43,40 +43,40 @@ To run the compiled executables, you can use the following commands:
 
 ## For Windows:
 
-clientv1.exe
-clientv2.exe
-clientv3.exe
-server.exe
-servermulti.exe
-servermutlichat.exe
+- clientv1.exe
+- clientv2.exe
+- clientv3.exe
+- server.exe
+- servermulti.exe
+- servermutlichat.exe
 
 ## For Linux or macOS:
 
-./clientv1
-./clientv2
-./clientv3
-./server
-./servermulti
-./servermutlichat
+- ./clientv1
+- ./clientv2
+- ./clientv3
+- ./server
+- ./servermulti
+- ./servermutlichat
 
 Please note that the usage and functionality of each client and server are specific to their respective pairings. Follow the prompts and instructions provided by each program to interact with them effectively.
 
 # Sources
-Windows lib for socket:
-https://stackoverflow.com/questions/67726142/how-can-i-use-sys-socket-h-on-windows
-
-copy a struct in a buffer:
-https://stackoverflow.com/questions/5589136/copy-struct-to-buffer
-
-compare string:
-https://stackoverflow.com/questions/8222495/how-to-compare-strings-in-an-if-statement
-
-separate a string in arguments:
-https://stackoverflow.com/questions/9210528/split-string-with-delimiters-in-c
-
-get the next token with strtok:
-https://stackoverflow.com/questions/3889992/how-does-strtok-split-the-string-into-tokens-in-c
-
-bubblesort:
-https://www.geeksforgeeks.org/bubble-sort-in-c/
+- Windows lib for socket:
+ https://stackoverflow.com/questions/67726142/how-can-i-use-sys-socket-h-on-windows
+ 
+- copy a struct in a buffer:
+ https://stackoverflow.com/questions/5589136/copy-struct-to-buffer
+ 
+- compare string:
+ https://stackoverflow.com/questions/8222495/how-to-compare-strings-in-an-if-statement
+ 
+- separate a string in arguments:
+ https://stackoverflow.com/questions/9210528/split-string-with-delimiters-in-c
+ 
+- get the next token with strtok:
+ https://stackoverflow.com/questions/3889992/how-does-strtok-split-the-string-into-tokens-in-c
+ 
+- bubblesort:
+ https://www.geeksforgeeks.org/bubble-sort-in-c/
 
