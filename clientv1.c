@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
             char *number_str = argv[i];
             // Verify if char is an int
             for (int j = 0; number_str[j] != '\0'; j++) {
-                if (!isdigit(number_str[j]) && (strcmp(number_str, "-") == 0)) {
+                if (!isdigit(number_str[j]) && number_str[j] != '-') {
                     printf("Wrong entry! \n");
                     closesocket(socket_Client);
                     WSACleanup();

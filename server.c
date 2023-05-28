@@ -102,7 +102,7 @@ int main() {
     // Close Client and server
     closesocket(socket_Server);
 
-    // // Close Winsock
+    // Close Winsock
     WSACleanup();
     return 0;
 }
