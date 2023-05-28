@@ -88,10 +88,10 @@ int main() {
     //printf("Validity connection: %i \n",validity);
     checkValidity(validity, "Connecting");
     struct message connection_msg;
-    printf("Server TEST \n");
+    //printf("Server TEST \n");
     while (server_full)
     {
-        printf("Inside \n");
+        //printf("Inside \n");
         recv(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
         if(strcmp(connection_msg.command, COMMAND_CONNECTION)==0)
             {
