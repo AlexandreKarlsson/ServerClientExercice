@@ -12,7 +12,7 @@ The code is organized as follows:
 - servermutlichat.c: Server implementation for clientv3.
 - message.h: Header file for the message implementation and information.
 - client.h: Header file for the clients.
-- message.h: Header file for the servers.
+- server.h: Header file for the servers.
 
 # Server-Client Pairings
 - clientv1 - server: This pairing allows the client (clientv1) to send a single command to the server (server). The server will process the command and provide a response.
@@ -25,7 +25,7 @@ The code is currently designed to run on Windows. However, you can adapt the cod
 # Compilation
 To compile the code and generate the executable files, you can use the following commands:
 
-## For Windows:
+## For Windows (MinGW required):
 - gcc server.c -o server.exe -lws2_32
 - gcc client.c -o client.exe -lws2_32
 - gcc clientv1.c -o clientv1.exe -lws2_32
@@ -33,6 +33,7 @@ To compile the code and generate the executable files, you can use the following
 - gcc clientv3.c -o clientv3.exe -lws2_32
 - gcc servermulti.c -o servermulti.exe -lws2_32 -lpthread
 - gcc servermultichat.c -o servermultichat.exe -lws2_32 -lpthread
+
 
 
 ## For Linux or macOS:
@@ -79,4 +80,7 @@ Please note that the usage and functionality of each client and server are speci
  
 - bubblesort:
  https://www.geeksforgeeks.org/bubble-sort-in-c/
+
+ - MinGW:
+ https://www.youtube.com/watch?v=gyKTt5_K-ak&ab_channel=HamdiBEJI
 
