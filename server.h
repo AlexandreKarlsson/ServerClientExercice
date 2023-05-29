@@ -4,5 +4,7 @@
 #define MAX_CLIENTS 3
 
 void checkValidity(int validity, char sentence[]);
+void printNumbers(int numbers[], int length);
+void bubbleSort(int numbers[], int length);
 
 #endif

@@ -13,32 +13,6 @@ int num_clients = 0;
 boolean queueIsFull = FALSE;
 SOCKET socket_Client_Q;
 
-void checkValidity(int validity, char sentence[]) {
-    if (validity < 0) {
-        printf("ERROR: %s \n", sentence);
-    }
-}
-
-void printNumbers(int numbers[], int length) {
-    printf("Output:");
-    for (int i = 0; i < length; i++) {
-        printf("%d ", numbers[i]);
-    }
-    printf("\n");
-}
-
-void bubbleSort(int numbers[], int length) {
-    for (int i = 0; i < length - 1; i++) {
-        for (int j = 0; j < length - i - 1; j++) {
-            if (numbers[j] > numbers[j + 1]) {
-                int temp = numbers[j];
-                numbers[j] = numbers[j + 1];
-                numbers[j + 1] = temp;
-            }
-        }
-    }
-    printNumbers(numbers, length);
-}
 
 void* threadClient(void* socket) {
     SOCKET client_socket = *(SOCKET*)socket;

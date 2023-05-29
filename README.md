@@ -4,11 +4,12 @@
 # Code Structure
 The code is organized as follows:
 
-- client.c: Client test.
+- client.c: Client repository.
+- server.c: Server repository.
 - clientv1.c: Client implementation for server.
 - clientv2.c: Client implementation for servermulti.
 - clientv3.c: Client implementation for servermutlichat.
-- server.c: Server implementation for clientv1.
+- serversolo.c: Server implementation for clientv1.
 - servermulti.c: Server implementation for clientv2.
 - servermutlichat.c: Server implementation for clientv3.
 - message.h: Header file for the message implementation and information.
@@ -16,7 +17,7 @@ The code is organized as follows:
 - server.h: Header file for the servers.
 
 # Server-Client Pairings
-- clientv1 - server: This pairing allows the client (clientv1) to send a single command to the server (server). The server will process the command and provide a response.
+- clientv1 - serversolo: This pairing allows the client (clientv1) to send a single command to the server (serversolo). The server will process the command and provide a response.
 - clientv2 - servermulti: The client (clientv2) communicates with the server (servermulti). Multiple clients can connect to the server simultaneously, and the server handles each client's requests in a separate thread. The server also includes a queue (with a capacity of 1) to handle situations when it is already serving the maximum number of clients. If the queue is full, the server rejects new client connections.
 - clientv3 - servermutlichat: The client (clientv3) interacts with the server (servermutlichat). The server prompts the client to provide a name and stores it to represent the client. Unlike the previous pairing, this server does not include a queue.
 
@@ -27,15 +28,12 @@ The code is currently designed to run on Windows. However, you can adapt the cod
 To compile the code and generate the executable files, you can use the following commands:
 
 ## For Windows (MinGW required):
-- gcc server.c -o server.exe -lws2_32
-- gcc client.c -o client.exe -lws2_32
-- gcc clientv1.c -o clientv1.exe -lws2_32
-- gcc clientv2.c -o clientv2.exe -lws2_32
-- gcc clientv3.c -o clientv3.exe -lws2_32
-- gcc servermulti.c -o servermulti.exe -lws2_32 -lpthread
-- gcc servermultichat.c -o servermultichat.exe -lws2_32 -lpthread
-
-
+- gcc clientv1.c client.c -o clientv1.exe -lws2_32
+- gcc clientv2.c client.c -o clientv2.exe -lws2_32
+- gcc clientv3.c client.c -o clientv3.exe -lws2_32
+- gcc serversolo.c server.c -o serversolo.exe -lws2_32
+- gcc servermulti.c server.c -o servermulti.exe -lws2_32 -lpthread
+- gcc servermultichat.c server.c -o servermultichat.exe -lws2_32 -lpthread
 
 ## For Linux or macOS:
 Ensure that you have the necessary libraries and dependencies installed for successful compilation on your platform.
@@ -48,7 +46,7 @@ To run the compiled executables, you can use the following commands:
 - clientv1.exe [COMMAND] [ORDER]
 - clientv2.exe
 - clientv3.exe
-- server.exe
+- serversolo.exe
 - servermulti.exe
 - servermutlichat.exe
 
@@ -57,20 +55,20 @@ To run the compiled executables, you can use the following commands:
 - ./clientv1 [COMMAND] [ORDER]
 - ./clientv2
 - ./clientv3
-- ./server
+- ./serversolo
 - ./servermulti
 - ./servermutlichat
 
 This project consists of different pairs of clients and servers and each pair has specific instructions.
 
-## Pair: clientv1-server
-The clientv1-server pair allows communication with a single server.
+## Pair: clientv1-serversolo
+The clientv1-serversolo pair allows communication with a single server.
 
 ### Instructions
-
-- Use the following command format to interact with the server: `clientv1 [COMMAND] [ORDER]`
-- Replace `[COMMAND]` with the desired command and `[ORDER]` with the corresponding order for that command.
-- Available commands:
+0. Launch the server typing `serversolo` in the terminal and open an other terminal for the client
+1. Use the following command format to interact with the serversolo: `clientv1 [COMMAND] [ORDER]`
+2. Replace `[COMMAND]` with the desired command and `[ORDER]` with the corresponding order for that command.
+3. Available commands:
   - `print`: Print a message on the server terminal. Enclose the message in double quotation marks.
   - `sort`: Sort a series of numbers (positive or negative integers). Separate the numbers with spaces.
 - Examples:
@@ -82,7 +80,7 @@ The clientv1-server pair allows communication with a single server.
 The clientv2-servermulti pair supports multiple clients connecting to a server simultaneously.
 
 ### Instructions
-
+0. Launch the server typing `servermulti` in the terminal and open an other terminal for the client
 1. Launch the client using the command: `clientv2`
 2. In the terminal, enter a command:
    - Use `print` to print a message on the server terminal.
@@ -96,7 +94,7 @@ The clientv2-servermulti pair supports multiple clients connecting to a server s
 The clientv3-servermultichat pair enables chat-like communication with the server.
 
 ### Instructions
-
+0. Launch the server typing `servermultichat` in the terminal and open an other terminal for the client
 1. Launch the client using the command: `clientv3`
 2. Enter your name and press ENTER.
 3. In the terminal, enter a command:
