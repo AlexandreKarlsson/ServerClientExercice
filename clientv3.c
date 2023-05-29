@@ -7,67 +7,6 @@
 #include <sys/types.h>
 #include "messages.h"
 
-
-
-void checkValidity(int validity, char *sentence){
-    if(validity<0){
-        printf("ERROR : %s \n",sentence);
-        exit(1);
-        }
-}
-void printNumbers(int numbers[], int length) {
-    printf("Lenght: %i \n",length);
-    printf("Numbers:");
-    for (int i = 0; i < length; i++) {
-        printf("%d ", numbers[i]);
-    }
-    printf("\n");
-}
-
-struct message printCommand(struct message cmd,char *order){
-    //printf("Print command detected \n");
-    //printf("order : %s \n", order);
-    // PAYLOAD /////////////////////////////////////////////////////////////////////////
-    struct print_command_payload cmd_payload;
-    /*
-    int len;
-    char string_to_print[MAX_PRINT_CHARS];
-    */
-    // copy the order in the cmd_payload with the max size as limit
-    strncpy(cmd_payload.string_to_print, order, MAX_PRINT_CHARS);
-    // get the lenght of the order in len
-    cmd_payload.len = strlen(cmd_payload.string_to_print);
-    //printf("cmd_payload.len : %i \n", cmd_payload.len);
-    if(cmd_payload.len==MAX_PRINT_CHARS){printf("WARNING LIMIT MAX");}
-
-    // Message /////////////////////////////////////////////////////////////////////////
-    strcpy(cmd.command, COMMAND_PRINT);
-    // copy the data of the payload inside the buffer
-    memcpy(cmd.buf, &cmd_payload, sizeof(struct print_command_payload));
-
-    return cmd;
-}
-
-struct message sortCommand(struct message cmd,int numbers[],int length){
-    //printf("Sort command detected \n");
-    // PAYLOAD /////////////////////////////////////////////////////////////////////////
-    struct sort_command_payload cmd_payload;
-    /*
-    int len;
-    int numbers[MAX_NUMBERS];
-    */
-    cmd_payload.len=length;
-    for (int i = 0; i < length; i++) {
-        cmd_payload.numbers[i] = numbers[i];
-    }
-    // Message /////////////////////////////////////////////////////////////////////////
-    strcpy(cmd.command, COMMAND_SORT);
-    // copy the data of the payload inside the buffer
-    memcpy(cmd.buf, &cmd_payload, sizeof(struct sort_command_payload));
-
-    return cmd;
-}
-
 int main() {
     int validity=404;
     char buffer[BUF_SIZE];
@@ -133,7 +72,8 @@ int main() {
                     }
                 }
                 if (valid) {
-                    sscanf(token, "%d", &numbers[count]);  // Convertir chaque nombre en entier
+                    // Convert token in integers
+                    sscanf(token, "%d", &numbers[count]);
                     count++;
                 } else {
                     printf("Wrong entry: %s\n", token);
@@ -156,8 +96,6 @@ int main() {
         if(known_cmd)
         {
             send(socket_Client, (char*) &msg, sizeof(struct message), 0);
-            
-            
             // ACK ///////////////////////////////////////////////
             struct message return_msg;
             recv(socket_Client, (char*)&return_msg, sizeof(struct message), 0);
