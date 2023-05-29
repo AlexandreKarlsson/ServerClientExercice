@@ -111,6 +111,7 @@ Note: Ensure that you follow the specified command formats and provide the requi
 ## Pair: clientv2-servermulti
 - if the client enter a wrong entry : client continue running
 ## Pair: clientv3-servermultichat
+- if the client enter a wrong entry : client continue running
 # Sources
 - Windows lib for socket:
  https://stackoverflow.com/questions/67726142/how-can-i-use-sys-socket-h-on-windows
