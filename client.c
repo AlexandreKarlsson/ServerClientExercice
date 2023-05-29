@@ -15,18 +15,15 @@ struct message printCommand(struct message cmd,char *order){
     int len;
     char string_to_print[MAX_PRINT_CHARS];
     */
-    // copy the order in the cmd_payload with the max size as limit
+    // Copy the order in the cmd_payload with the max size as limit
     strncpy(cmd_payload.string_to_print, order, MAX_PRINT_CHARS);
-    // get the lenght of the order in len
+    // Get the lenght of the order in len
     cmd_payload.len = strlen(cmd_payload.string_to_print);
-    //printf("cmd_payload.len : %i \n", cmd_payload.len);
     if(cmd_payload.len==MAX_PRINT_CHARS){printf("WARNING LIMIT MAX");}
-
     // Message /////////////////////////////////////////////////////////////////////////
     strcpy(cmd.command, COMMAND_PRINT);
     // copy the data of the payload inside the buffer
     memcpy(cmd.buf, &cmd_payload, sizeof(struct print_command_payload));
-
     return cmd;
 }
 

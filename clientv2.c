@@ -9,14 +9,16 @@
 
 int main() {
     int validity=404;
-    char buffer[BUF_SIZE];
     boolean known_cmd=TRUE;
+    // variable to see if the server is full
     boolean server_full=TRUE;
+
+    char buffer[BUF_SIZE];
     struct message msg;
+
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-    //SOCKET socket_Client;
     int socket_Client = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr_Server;
     addr_Server.sin_addr.s_addr = inet_addr(ADDR_CLIENT);
@@ -24,13 +26,10 @@ int main() {
     addr_Server.sin_port = htons(PORT);
 
     validity=connect(socket_Client, (struct sockaddr*)&addr_Server, sizeof(addr_Server));
-    //printf("Validity connection: %i \n",validity);
     checkValidity(validity, "Connecting");
     struct message connection_msg;
-    //printf("Server TEST \n");
     while (server_full)
     {
-        //printf("Inside \n");
         recv(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
         if(strcmp(connection_msg.command, COMMAND_CONNECTION)==0)
             {
@@ -62,17 +61,14 @@ int main() {
             }
     }
     while (1) {
-        // Lecture de la commande depuis l'entrée utilisateur
         printf("Enter a command (or 'close' to exit): ");
         scanf("%s", buffer);
 
         if (strcmp(buffer, COMMAND_CLOSE) == 0) {
-            // Close the client
             closesocket(socket_Client);
             WSACleanup();
             break;
         }
-         // Traitement des autres commandes
         if (strcmp(buffer, COMMAND_PRINT) == 0) {
             printf("Print Command detected \n");
             char order[MAX_PRINT_CHARS];
@@ -83,26 +79,25 @@ int main() {
         }
         else if (strcmp(buffer, COMMAND_SORT) == 0) 
         {
-             printf("Sort Command detected\n");
+            printf("Sort Command detected\n");
             int numbers[MAX_NUMBERS];
             int count = 0;
             printf("Enter the numbers (example: 3 1 2): ");
             char input[BUF_SIZE];
             scanf(" %[^\n]", input);
-            //printf("number received: %s\n", input);
 
-            // split the input into tokens
+            // Split the input into tokens
             char* token = strtok(input, " ");
             while (token != NULL && count < MAX_NUMBERS) {
                 int valid = 1;
                 for (int i = 0; token[i] != '\0'; i++) {
-                    if (!isdigit(token[i]) && (token[i] != '-')) {
+                    if (!isdigit(token[i]) && (token[0] != '-')) {
                         valid = 0;
                         break;
                     }
                 }
                 if (valid) {
-                    sscanf(token, "%d", &numbers[count]);  // Convertir chaque nombre en entier
+                    sscanf(token, "%d", &numbers[count]);
                     count++;
                 } else {
                     printf("Wrong entry: %s\n", token);

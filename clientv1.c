@@ -8,9 +8,11 @@
 #include "messages.h"
 
 int main(int argc, char *argv[]) {
+    // Variable to see if connection goes well
     int validity=404;
-    char buffer[BUF_SIZE];
+    // Variable to see if the command is known
     boolean known_cmd=TRUE;
+    char buffer[BUF_SIZE];
     struct message msg;
     /*
     char command[COMMAND_STR_LENGTH];
@@ -18,20 +20,28 @@ int main(int argc, char *argv[]) {
     */
     //printf("Start %s \n",argv[0]);
     
+    // Variable to stock information for implementation of Winsock
     WSADATA wsaData;
+    // Initialise Winsock with version 2.2 and put it in wsaData
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-    //SOCKET socket_Client;
+    // Initialise socket_Client
+    // Create a socket on the client side : AF_INET= adress familly of the IP IPV4, SOCK_STREAM is for TCP and 0 is for the protocol=> chose automaticaly
     int socket_Client = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr_Server;
+    // Set the IP adress of ther server in addr_Server and inet_addr convert a string into an IP adress
     addr_Server.sin_addr.s_addr = inet_addr(ADDR_CLIENT);
+    // IPV4
     addr_Server.sin_family = AF_INET;
+    // Set the port number in the structure, htons convert the host byte number order into a network order
     addr_Server.sin_port = htons(PORT);
 
+    // Establish connection with the server : (struct sockaddr*)&addr_Server) pointer to addr_Server => struct sockaddr* to match function signature.
+    // sizeof(addr_Server) is the size of the address structure
     validity=connect(socket_Client, (struct sockaddr*)&addr_Server, sizeof(addr_Server));
-    //printf("Client connecting \n");
     checkValidity(validity, "Connecting");
 
+    ////////////////////////////////////////////////////////////////////////
     // CONNECTION OK => COMMAND TREATMENT
     /*
     for (size_t i = 0; i < argc; i++)
@@ -40,33 +50,39 @@ int main(int argc, char *argv[]) {
     }
     */
     // argv[1]=class argv[2]=command argv[3]=order
-
-    if (argc < 3) {
+    ////////////////////////////////////////////////////////////////////////
+    if (argc < 3) 
+    {
         printf("Missing input arguments!\n");
         closesocket(socket_Client);
         WSACleanup();
         exit(1);
     }
     char *order = argv[2];
-    
-    if (strcmp(argv[1], COMMAND_PRINT) == 0) {
-        if(argc>3){
+    if (strcmp(argv[1], COMMAND_PRINT) == 0) 
+    {
+        if(argc>3)
+        {
             printf("Excess input arguments! \n");
             closesocket(socket_Client);
             WSACleanup();
             exit(1);
-            }
+        }
+        // Create the message as a PRINT message
         msg=printCommand(msg,order);
     }
-    else if (strcmp(argv[1], COMMAND_SORT)==0){
+    else if (strcmp(argv[1], COMMAND_SORT)==0)
+    {
         int numbers[MAX_NUMBERS];
         int count=0;
-        // go trough all arguments
+        // Go trough all arguments
         for (int i = 2; i < argc; i++) {
             char *number_str = argv[i];
             // Verify if char is an int
-            for (int j = 0; number_str[j] != '\0'; j++) {
-                if (!isdigit(number_str[j]) && number_str[j] != '-') {
+            for (int j = 0; number_str[j] != '\0'; j++) 
+            {
+                if (!isdigit(number_str[j]) && number_str[0] != '-') 
+                {
                     printf("Wrong entry! \n");
                     closesocket(socket_Client);
                     WSACleanup();
@@ -76,11 +92,11 @@ int main(int argc, char *argv[]) {
             // convert arg in int and put it in numbers
             numbers[count++] = atoi(number_str);
         }
-
-        //printNumbers(numbers,count);
+        // Create the message as a PRINT message
         msg=sortCommand(msg,numbers,count);
     }
-    else{
+    else
+    {
         printf("Unknown command!\n");
         known_cmd = FALSE; 
         closesocket(socket_Client);
@@ -123,12 +139,9 @@ int main(int argc, char *argv[]) {
         closesocket(socket_Client);
         WSACleanup();
     }
-
-    
-
-    // Fermer la connexion avec le serveur
+    // Close the connection with the server
     closesocket(socket_Client);
-    // Terminer l'utilisation de Winsock
+    // Close Winsock
     WSACleanup();
 
     return 0;

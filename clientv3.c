@@ -12,10 +12,10 @@ int main() {
     char buffer[BUF_SIZE];
     boolean known_cmd=TRUE;
     struct message msg;
+
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-    //SOCKET socket_Client;
     int socket_Client = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr_Server;
     addr_Server.sin_addr.s_addr = inet_addr(ADDR_CLIENT);
@@ -24,6 +24,8 @@ int main() {
 
     validity=connect(socket_Client, (struct sockaddr*)&addr_Server, sizeof(addr_Server));
     checkValidity(validity, "Connecting");
+    
+    // Server ASK the client his name => NO USE OF THE STRUCT MSG ---------------
     char req[30];
     char name[MAX_NAME_SIZE];
     recv(socket_Client, req, 30, 0);
@@ -32,17 +34,14 @@ int main() {
     send(socket_Client, name, sizeof(name), 0);
 
     while (1) {
-        // Lecture de la commande depuis l'entrée utilisateur
         printf("Enter a command (or 'close' to exit): ");
         scanf("%s", buffer);
 
         if (strcmp(buffer, COMMAND_CLOSE) == 0) {
-            // Close the client
             closesocket(socket_Client);
             WSACleanup();
             break;
         }
-         // Traitement des autres commandes
         if (strcmp(buffer, COMMAND_PRINT) == 0) {
             printf("Print Command detected \n");
             char order[MAX_PRINT_CHARS];
@@ -61,18 +60,16 @@ int main() {
             scanf(" %[^\n]", input);
             printf("number received: %s\n", input);
 
-            // split the input into tokens
             char* token = strtok(input, " ");
             while (token != NULL && count < MAX_NUMBERS) {
                 int valid = 1;
                 for (int i = 0; token[i] != '\0'; i++) {
-                    if (!isdigit(token[i]) && (token[i] != '-')) {
+                    if (!isdigit(token[i]) && (token[0] != '-')) {
                         valid = 0;
                         break;
                     }
                 }
                 if (valid) {
-                    // Convert token in integers
                     sscanf(token, "%d", &numbers[count]);
                     count++;
                 } else {
@@ -124,11 +121,7 @@ int main() {
             WSACleanup();
         }
     } 
-
-    // Fermer la connexion avec le serveur
     closesocket(socket_Client);
-    // Terminer l'utilisation de Winsock
     WSACleanup();
-
     return 0;
 }
