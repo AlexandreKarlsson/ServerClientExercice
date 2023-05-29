@@ -105,7 +105,12 @@ The clientv3-servermultichat pair enables chat-like communication with the serve
 5. For the `sort` command, enter a series of numbers to be sorted (positive or negative integers), separated by spaces.
 
 Note: Ensure that you follow the specified command formats and provide the required arguments as mentioned above.
-
+# Problems
+## Common to all pair
+## Pair: clientv1-serversolo
+## Pair: clientv2-servermulti
+- if the client enter a wrong entry : client continue running
+## Pair: clientv3-servermultichat
 # Sources
 - Windows lib for socket:
  https://stackoverflow.com/questions/67726142/how-can-i-use-sys-socket-h-on-windows
