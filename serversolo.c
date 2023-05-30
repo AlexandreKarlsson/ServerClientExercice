@@ -9,6 +9,7 @@
 
 int main() {
     int validity = 404;
+    boolean cmd_not_done = TRUE;
     // Client that will connect
     SOCKET socket_Client;
     struct sockaddr_in addr_Client;
@@ -29,11 +30,11 @@ int main() {
     addr_Server.sin_port = htons(PORT);
 
     validity= bind(socket_Server, (struct sockaddr *)&addr_Server, sizeof(addr_Server));
-    printf("Server binding\n");
+    //printf("Server binding\n");
     checkValidity(validity, "Binding");
 
     validity=listen(socket_Server, 3);
-    printf("Server Listening\n");
+    //printf("Server Listening\n");
     checkValidity(validity, "Listening");
     while (TRUE)
     {
@@ -43,10 +44,14 @@ int main() {
         checkValidity(validity, "Receive");
         
         if (strcmp(msg.command, COMMAND_PRINT) == 0) {
-            printf("Command: %s \n", msg.command);
-            struct print_command_payload* msg_payload = (struct print_command_payload*)msg.buf;
-            printf("Output: %s \n", msg_payload->string_to_print);
-            //printf("msg_payload.len : %i \n", msg_payload->len);
+            if(cmd_not_done=TRUE)
+            {
+                printf("Command: %s \n", msg.command);
+                struct print_command_payload* msg_payload = (struct print_command_payload*)msg.buf;
+                printf("Output: %s \n", msg_payload->string_to_print);
+                //printf("msg_payload.len : %i \n", msg_payload->len);
+                cmd_not_done=FALSE;
+            }
         }
         else if (strcmp(msg.command, COMMAND_SORT)==0){
             printf("Command: %s \n", msg.command);
