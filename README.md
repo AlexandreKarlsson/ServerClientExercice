@@ -108,6 +108,7 @@ The clientv3-servermultichat pair enables chat-like communication with the serve
 Note: Ensure that you follow the specified command formats and provide the required arguments as mentioned above.
 # Problems
 ## Common to all pair
+- Clients and servers have all the same IP adress `ADDR_SERVER` and `ADDR_CLIENT`
 ## Pair: clientv1-serversolo
 ## Pair: clientv2-servermulti
 - if the client enter a wrong entry : client continue running
