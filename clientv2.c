@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h> 
 #include <string.h>
+// ################### : change with socket for linux of Mac
 #include <winsock2.h>
 #include <sys/types.h>
 #include "messages.h"
@@ -16,6 +17,7 @@ int main() {
     char buffer[BUF_SIZE];
     struct message msg;
 
+    // ################### : Suppress for linux or Mac
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
@@ -27,7 +29,9 @@ int main() {
 
     validity=connect(socket_Client, (struct sockaddr*)&addr_Server, sizeof(addr_Server));
     checkValidity(validity, "Connecting");
+
     struct message connection_msg;
+
     while (server_full)
     {
         recv(socket_Client, (char*)&connection_msg, sizeof(struct message), 0);
@@ -103,7 +107,7 @@ int main() {
                     printf("Wrong entry: %s\n", token);
                     closesocket(socket_Client);
                     WSACleanup();
-                    exit(1);
+                    break;
                 }
                 token = strtok(NULL, " ");
             }
@@ -148,10 +152,8 @@ int main() {
             WSACleanup();
         }
     } 
-
-    // Fermer la connexion avec le serveur
     closesocket(socket_Client);
-    // Terminer l'utilisation de Winsock
+    // ################### : Suppress for linux or Mac
     WSACleanup();
 
     return 0;

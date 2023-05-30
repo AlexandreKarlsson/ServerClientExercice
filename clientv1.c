@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h> 
 #include <string.h>
+// ################### : change with socket for linux of Mac
 #include <winsock2.h>
 #include <sys/types.h>
 #include "messages.h"
@@ -20,9 +21,9 @@ int main(int argc, char *argv[]) {
     */
     //printf("Start %s \n",argv[0]);
     
-    // Variable to stock information for implementation of Winsock
+    // Variable to stock information for implementation of Winsock     ################### : Suppress for linux or Mac
     WSADATA wsaData;
-    // Initialise Winsock with version 2.2 and put it in wsaData
+    // Initialise Winsock with version 2.2 and put it in wsaData       ################### : Suppress for linux or Mac
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
     // Initialise socket_Client
@@ -141,8 +142,7 @@ int main(int argc, char *argv[]) {
     }
     // Close the connection with the server
     closesocket(socket_Client);
-    // Close Winsock
+    // Close Winsock                         ################### : Suppress for linux or Mac
     WSACleanup();
-
     return 0;
 }

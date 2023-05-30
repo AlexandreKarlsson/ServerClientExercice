@@ -36,7 +36,8 @@ To compile the code and generate the executable files, you can use the following
 - gcc servermultichat.c server.c -o servermultichat.exe -lws2_32 -lpthread
 
 ## For Linux or macOS:
-Ensure that you have the necessary libraries and dependencies installed for successful compilation on your platform.
+- Ensure that you have the necessary libraries and dependencies installed for successful compilation on your platform. (socket and pthread)
+- You have the instruction after in the commantary as `########## : [instruction] for linux or Mac`
 
 # Usage
 To run the compiled executables, you can use the following commands:
@@ -112,6 +113,7 @@ Note: Ensure that you follow the specified command formats and provide the requi
 - if the client enter a wrong entry : client continue running
 ## Pair: clientv3-servermultichat
 - if the client enter a wrong entry : client continue running
+
 # Sources
 - Windows lib for socket:
  https://stackoverflow.com/questions/67726142/how-can-i-use-sys-socket-h-on-windows
@@ -130,6 +132,9 @@ Note: Ensure that you follow the specified command formats and provide the requi
  
 - bubblesort:
  https://www.geeksforgeeks.org/bubble-sort-in-c/
+
+ - bubblesort:
+ https://www.youtube.com/watch?v=RYvibCOZEWY&ab_channel=Algomius
 
  - MinGW:
  https://www.youtube.com/watch?v=gyKTt5_K-ak&ab_channel=HamdiBEJI
