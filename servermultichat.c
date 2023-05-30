@@ -74,13 +74,13 @@ void* threadClient(void* socket)
         }
         if (strcmp(msg.command, COMMAND_PRINT) == 0) 
         {
-            printf("Command: %s \n", msg.command);
+            printf("Command %s: %s \n", name,msg.command);
             struct print_command_payload* msg_payload = (struct print_command_payload*)msg.buf;
             printf("Output: %s \n", msg_payload->string_to_print);
         }
         else if (strcmp(msg.command, COMMAND_SORT) == 0) 
         {
-            printf("Command: %s \n", msg.command);
+            printf("Command %s: %s \n", name, msg.command);
             struct sort_command_payload* msg_payload = (struct sort_command_payload*)msg.buf;
             //printNumbers(msg_payload->numbers, msg_payload->len);
             bubbleSort(msg_payload->numbers, msg_payload->len);
