@@ -7,12 +7,14 @@
 #include <sys/types.h>
 #include "messages.h"
 
-int main() {
+int main() 
+{
     int validity=404;
     char buffer[BUF_SIZE];
     boolean known_cmd=TRUE;
     struct message msg;
 
+    // ################### : Suppress for linux or Mac
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
@@ -33,16 +35,19 @@ int main() {
     scanf("%s",name);
     send(socket_Client, name, sizeof(name), 0);
 
-    while (1) {
+    while (1) 
+    {
         printf("Enter a command (or 'close' to exit): ");
         scanf("%s", buffer);
 
-        if (strcmp(buffer, COMMAND_CLOSE) == 0) {
+        if (strcmp(buffer, COMMAND_CLOSE) == 0) 
+        {
             closesocket(socket_Client);
             WSACleanup();
             break;
         }
-        if (strcmp(buffer, COMMAND_PRINT) == 0) {
+        if (strcmp(buffer, COMMAND_PRINT) == 0)
+         {
             printf("Print Command detected \n");
             char order[MAX_PRINT_CHARS];
             printf("Enter the order: ");
@@ -52,7 +57,7 @@ int main() {
         }
         else if (strcmp(buffer, COMMAND_SORT) == 0) 
         {
-             printf("Sort Command detected\n");
+            printf("Sort Command detected\n");
             int numbers[MAX_NUMBERS];
             int count = 0;
             printf("Enter the numbers (example: 3 1 2): ");
@@ -61,18 +66,24 @@ int main() {
             printf("number received: %s\n", input);
 
             char* token = strtok(input, " ");
-            while (token != NULL && count < MAX_NUMBERS) {
+            while (token != NULL && count < MAX_NUMBERS) 
+            {
                 int valid = 1;
-                for (int i = 0; token[i] != '\0'; i++) {
-                    if (!isdigit(token[i]) && (token[0] != '-')) {
+                for (int i = 0; token[i] != '\0'; i++) 
+                {
+                    if (!isdigit(token[i]) && (token[0] != '-'))
+                     {
                         valid = 0;
                         break;
                     }
                 }
-                if (valid) {
+                if (valid) 
+                {
                     sscanf(token, "%d", &numbers[count]);
                     count++;
-                } else {
+                } 
+                else 
+                {
                     printf("Wrong entry: %s\n", token);
                     closesocket(socket_Client);
                     WSACleanup();
@@ -85,7 +96,8 @@ int main() {
             known_cmd = TRUE;
         }
         
-        else {
+        else 
+        {
             printf("Unknown command!\n");
             known_cmd=FALSE;
         }
@@ -109,7 +121,8 @@ int main() {
                 {
                     printf("Ack : ERROR \n");
                 }
-                else{
+                else
+                {
                     printf("Communication error \n");
                 }
             }
@@ -122,6 +135,7 @@ int main() {
         }
     } 
     closesocket(socket_Client);
+    // ################### : Suppress for linux or Mac
     WSACleanup();
     return 0;
 }
